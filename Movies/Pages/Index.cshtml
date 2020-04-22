@@ -3,31 +3,32 @@
 @{
     ViewData["Title"] = "Home page";
 }
-
-<h1>Movie</h1>
+    <form>
+        <input type="text" name="SearchTerms" value="@Model.SearchTerms"/>
+        <input type="submit" value="Search"/>
+    </form>
+<h1>Movie Results</h1>
 <ul class="movie-list">
-    @foreach(Movie movie in MovieDatabase.All)
+    @foreach(Movie movie in @Model.Movies)
     {
         <li>
             <div class="details">
                 <h3 class="title">@movie.Title</h3>
-                @if (movie.MPAARating != null)
-                {
-                    <div class="mpaa">Rated @movie.MPAARating</div>
-                }
-                @if (movie.MajorGenre != null)
-                {
-                    <div class="genre">@movie.MajorGenre</div>
-                }
+                <div class="mpaa">@movie.MPAARating</div>
+                <div class="genre">@movie.MajorGenre</div>
             </div>
             <div class="ratings">
                 @if (movie.IMDBRating != null)
                 {
-                    <div class="imdb">@movie.IMDBRating</div>
+                    <div class="imdb">
+                        @movie.IMDBRating
+                    </div>
                 }
                 @if (movie.RottenTomatoesRating != null)
                 {
-                    <div class="rotten-tomatoes">@movie.RottenTomatoesRating</div>
+                    <div class="rotten-tomatoes">
+                        @movie.RottenTomatoesRating
+                    </div>
                 }
             </div>
         </li>

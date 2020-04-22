@@ -9,23 +9,62 @@ namespace Movies.Pages
 {
     public class IndexModel : PageModel
     {
+
+
+
         /// <summary>
-        /// The movies to display on the index page
+        /// The filtered genres
+        /// </summary>
+        [BindProperty]
+        public string[] Genres { get; set; }
+
+
+        /// <summary>
+        /// The movies to display on the index page 
         /// </summary>
         public IEnumerable<Movie> Movies { get; protected set; }
 
+
         /// <summary>
-        /// The current search terms
+        /// Gets and sets the search terms
         /// </summary>
+        [BindProperty]
         public string SearchTerms { get; set; }
 
         /// <summary>
-        /// Invokes every time the page is requested using a GET request. 
+        /// Gets and sets the MPAA rating filters
         /// </summary>
-        public void OnGet()
+        [BindProperty]
+        public string[] MPAARating { get; set; }
+
+
+        /// <summary>
+        /// Gets and sets the IMDB minimium rating
+        /// </summary>
+        [BindProperty]
+        public double? IMDBMin { get; set; }
+
+        /// <summary>
+        /// Gets and sets the IMDB maximum rating
+        /// </summary>
+        [BindProperty]
+        public double? IMDBMax { get; set; }
+
+        /// <summary>
+        /// Does the response initialization for incoming GET requests
+        /// </summary>
+        public void OnGet(double? IMDBMin, double? IMDBMax)
         {
-            String terms = Request.Query["SearchTerms"];
+            // Nullable conversion workaround
+            this.IMDBMin = IMDBMin;
+            this.IMDBMax = IMDBMax;
+            MPAARating = Request.Query["MPAARatings"];
+            Genres = Request.Query["Genres"];
+            Movies = MovieDatabase.Search(SearchTerms);
+            Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARating);
+            Movies = MovieDatabase.FilterByIMDBRating(Movies, IMDBMin, IMDBMax);
 
         }
+
     }
 }

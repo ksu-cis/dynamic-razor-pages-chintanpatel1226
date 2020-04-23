@@ -64,7 +64,6 @@ namespace Movies.Pages
         /// </summary>
         public void OnGet(double? IMDBMin, double? IMDBMax, double? RTMin, double? RTMax)
         {
-            // Nullable conversion workaround
             this.IMDBMin = IMDBMin;
             this.IMDBMax = IMDBMax;
             this.RTMax = RTMax;

@@ -26,13 +26,13 @@ namespace Movies.Pages
         /// Gets and sets the search terms
         /// </summary>
         [BindProperty]
-        public string SearchTerms { get; set; }
+        public string SearchTerms { get; set; } = " ";
 
         /// <summary>
         /// Gets and sets the MPAA rating filters
         /// </summary>
         [BindProperty]
-        public string[] MPAARating { get; set; }
+        public string[] MPAARating { get; set; } = new string[0];
 
 
         /// <summary>
@@ -62,15 +62,14 @@ namespace Movies.Pages
         /// <summary>
         /// Does the response initialization for incoming GET requests
         /// </summary>
-        public void OnGet(double? IMDBMin, double? IMDBMax, double? RTMin, double? RTMax)
+        public void OnGet()
         {
-            this.IMDBMin = IMDBMin;
-            this.IMDBMax = IMDBMax;
-            this.RTMax = RTMax;
-            this.RTMin = RTMin;
-            SearchTerms = Request.Query["SearchTerms"];
-            MPAARating = Request.Query["MPAARatings"];
-            Genres = Request.Query["Genres"];
+            Movies = MovieDatabase.All;
+            
+        }
+
+        public void OnPost()
+        {
             Movies = MovieDatabase.Search(SearchTerms);
             Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARating);
             Movies = MovieDatabase.FilterByIMDBRating(Movies, IMDBMin, IMDBMax);

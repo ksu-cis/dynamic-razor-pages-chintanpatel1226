@@ -9,9 +9,6 @@ namespace Movies.Pages
 {
     public class IndexModel : PageModel
     {
-
-
-
         /// <summary>
         /// The filtered genres
         /// </summary>
@@ -51,19 +48,35 @@ namespace Movies.Pages
         public double? IMDBMax { get; set; }
 
         /// <summary>
+        /// Gets and sets the Rotten Tomato minimium rating
+        /// </summary>
+        [BindProperty]
+        public double? RTMin { get; set; }
+
+        /// <summary>
+        /// Gets and sets the Rotten Tomato maximum rating
+        /// </summary>
+        [BindProperty]
+        public double? RTMax { get; set; }
+
+        /// <summary>
         /// Does the response initialization for incoming GET requests
         /// </summary>
-        public void OnGet(double? IMDBMin, double? IMDBMax)
+        public void OnGet(double? IMDBMin, double? IMDBMax, double? RTMin, double? RTMax)
         {
             // Nullable conversion workaround
             this.IMDBMin = IMDBMin;
             this.IMDBMax = IMDBMax;
+            this.RTMax = RTMax;
+            this.RTMin = RTMin;
+            SearchTerms = Request.Query["SearchTerms"];
             MPAARating = Request.Query["MPAARatings"];
             Genres = Request.Query["Genres"];
             Movies = MovieDatabase.Search(SearchTerms);
             Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARating);
             Movies = MovieDatabase.FilterByIMDBRating(Movies, IMDBMin, IMDBMax);
-
+            Movies = MovieDatabase.FilterByGenre(Movies, Genres);
+            Movies = MovieDatabase.FilterByRottenTomatoRatings(Movies, RTMin, RTMax);
         }
 
     }
